@@ -1,0 +1,17 @@
+{
+    "name": "BulkHttpRequestPiece",
+    "description": "Makes HTTP requests to a list of URLs and returns a list of base64 encoded responses.",
+    "dependency": {
+        "requirements_file": "requirements_0.txt"
+    },
+    "tags": [
+        "default",
+        "http",
+        "request",
+        "bulk"
+    ],
+    "style": {
+        "node_label": "Bulk HTTP Request",
+        "icon_class_name": "material-symbols:send"
+    }
+}

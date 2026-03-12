@@ -1,0 +1,16 @@
+{
+    "name": "BulkImageFilterPiece",
+    "description": "A Piece that applies selected image filters to a list of images.",
+    "dependency": {
+        "requirements_file": "requirements_0.txt"
+    },
+    "tags": [
+        "default",
+        "image",
+        "bulk"
+    ],
+    "style": {
+        "node_label": "Bulk Image Filter",
+        "icon_class_name": "ic:twotone-filter"
+    }
+}
