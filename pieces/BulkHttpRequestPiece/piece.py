@@ -38,6 +38,11 @@ class BulkHttpRequestPiece(BasePiece):
 
                 response.raise_for_status()
                 base64_data = base64.b64encode(response.content).decode('utf-8')
+                self.logger.info(
+                    f"URL {url}: response size={len(response.content)} bytes, "
+                    f"content_type={response.headers.get('content-type', 'unknown')}, "
+                    f"base64 length={len(base64_data)}"
+                )
                 base64_bytes_data_list.append(base64_data)
                 errors.append("")
             except Exception as e:

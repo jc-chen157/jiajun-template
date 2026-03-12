@@ -31,19 +31,28 @@ class BulkImageFilterPiece(BasePiece):
             return Image.open(input_image)
         else:
             self.logger.info("Input image is not a file path, trying to decode as base64 string")
+            self.logger.info(f"Base64 string length: {len(input_image)}, first 100 chars: {input_image[:100]}")
             try:
                 decoded_data = base64.b64decode(input_image)
+                self.logger.info(f"Decoded data size: {len(decoded_data)} bytes, first 20 bytes: {decoded_data[:20]}")
                 image_stream = BytesIO(decoded_data)
                 image = Image.open(image_stream)
                 image.verify()
+                image_stream.seek(0)
                 image = Image.open(image_stream)
+                self.logger.info(f"Opened image: mode={image.mode}, size={image.size}, format={image.format}")
                 return image
             except Exception:
                 raise ValueError("Input image is not a file path or a base64 encoded string")
 
     def _apply_filters(self, image: Image.Image, all_filters: list) -> Image.Image:
         """Apply filter masks to an image via numpy matrix multiplication."""
+        # Convert to RGB to ensure 3 channels (handles grayscale, palette, RGBA, etc.)
+        if image.mode != 'RGB':
+            self.logger.info(f"Converting image from mode '{image.mode}' to 'RGB'")
+            image = image.convert('RGB')
         np_image = np.array(image, dtype=float)
+        self.logger.info(f"Image array shape: {np_image.shape}, dtype: {np_image.dtype}")
         for filter_name in all_filters:
             np_mask = np.array(filter_masks[filter_name], dtype=float)
             for y in range(np_image.shape[0]):
