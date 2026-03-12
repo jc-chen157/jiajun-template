@@ -1,6 +1,559 @@
 {
-    "ExampleSimplePiece": {
-        "name": "ExampleSimplePiece",
+    "HttpRequestPiece": {
+        "name": "HttpRequestPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "http",
+            "request"
+        ],
+        "style": {
+            "node_label": "HTTP Request",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "material-symbols:send",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Makes a HTTP request to a given URL.",
+        "input_schema": {
+            "$defs": {
+                "MethodTypes": {
+                    "enum": [
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE"
+                    ],
+                    "title": "MethodTypes",
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "url": {
+                    "description": "URL to make a request to.",
+                    "title": "Url",
+                    "type": "string"
+                },
+                "method": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/MethodTypes"
+                        }
+                    ],
+                    "default": "GET",
+                    "description": "HTTP method to use."
+                },
+                "bearer_token": {
+                    "default": null,
+                    "description": "Bearer token to use for authentication.",
+                    "title": "Bearer Token",
+                    "type": "string"
+                },
+                "body_json_data": {
+                    "default": "{\n    \"key_1\": \"value_1\",\n    \"key_2\": \"value_2\"\n}\n",
+                    "description": "JSON data to send in the request body.",
+                    "title": "Body Json Data",
+                    "type": "string",
+                    "widget": "codeeditor-json"
+                }
+            },
+            "required": [
+                "url"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "properties": {
+                "base64_bytes_data": {
+                    "description": "Output data as base64 encoded string.",
+                    "title": "Base64 Bytes Data",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "base64_bytes_data"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/jc-chen157/jiajun-template/tree/main/pieces/HttpRequestPiece"
+    },
+    "BulkImageFilterPiece": {
+        "name": "BulkImageFilterPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "image",
+            "bulk"
+        ],
+        "style": {
+            "node_label": "Bulk Image Filter",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "ic:twotone-filter",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "A Piece that applies selected image filters to a list of images.",
+        "input_schema": {
+            "$defs": {
+                "OutputTypeType": {
+                    "description": "Output type for the result text",
+                    "enum": [
+                        "file",
+                        "base64_string",
+                        "both"
+                    ],
+                    "title": "OutputTypeType",
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "input_images": {
+                    "default": [],
+                    "description": "List of input images. Each should be either a path to a file, or a base64 encoded string.",
+                    "from_upstream": "always",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Input Images",
+                    "type": "array"
+                },
+                "sepia": {
+                    "default": false,
+                    "description": "Apply sepia effect.",
+                    "title": "Sepia",
+                    "type": "boolean"
+                },
+                "black_and_white": {
+                    "default": false,
+                    "description": "Apply black and white effect.",
+                    "title": "Black And White",
+                    "type": "boolean"
+                },
+                "brightness": {
+                    "default": false,
+                    "description": "Apply brightness effect.",
+                    "title": "Brightness",
+                    "type": "boolean"
+                },
+                "darkness": {
+                    "default": false,
+                    "description": "Apply darkness effect.",
+                    "title": "Darkness",
+                    "type": "boolean"
+                },
+                "contrast": {
+                    "default": false,
+                    "description": "Apply contrast effect.",
+                    "title": "Contrast",
+                    "type": "boolean"
+                },
+                "red": {
+                    "default": false,
+                    "description": "Apply red effect.",
+                    "title": "Red",
+                    "type": "boolean"
+                },
+                "green": {
+                    "default": false,
+                    "description": "Apply green effect.",
+                    "title": "Green",
+                    "type": "boolean"
+                },
+                "blue": {
+                    "default": false,
+                    "description": "Apply blue effect.",
+                    "title": "Blue",
+                    "type": "boolean"
+                },
+                "cool": {
+                    "default": false,
+                    "description": "Apply cool effect.",
+                    "title": "Cool",
+                    "type": "boolean"
+                },
+                "warm": {
+                    "default": false,
+                    "description": "Apply warm effect.",
+                    "title": "Warm",
+                    "type": "boolean"
+                },
+                "output_type": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/OutputTypeType"
+                        }
+                    ],
+                    "default": "both",
+                    "description": "Format of the output images. Options are: `file`, `base64_string`, `both`."
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "properties": {
+                "image_base64_strings": {
+                    "default": [],
+                    "description": "List of base64 encoded strings of the output images.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Image Base64 Strings",
+                    "type": "array"
+                },
+                "image_file_paths": {
+                    "default": [],
+                    "description": "List of paths to the output image files.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Image File Paths",
+                    "type": "array"
+                }
+            },
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/jc-chen157/jiajun-template/tree/main/pieces/BulkImageFilterPiece"
+    },
+    "ImageFilterPiece": {
+        "name": "ImageFilterPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "image"
+        ],
+        "style": {
+            "node_label": "Image Filter",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "ic:twotone-filter",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "A Piece that applies selected image filters to an image.",
+        "input_schema": {
+            "$defs": {
+                "OutputTypeType": {
+                    "description": "Output type for the result text",
+                    "enum": [
+                        "file",
+                        "base64_string",
+                        "both"
+                    ],
+                    "title": "OutputTypeType",
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "input_image": {
+                    "description": "Input image. It should be either a path to a file, or a base64 encoded string.",
+                    "from_upstream": "always",
+                    "title": "Input Image",
+                    "type": "string"
+                },
+                "sepia": {
+                    "default": false,
+                    "description": "Apply sepia effect.",
+                    "title": "Sepia",
+                    "type": "boolean"
+                },
+                "black_and_white": {
+                    "default": false,
+                    "description": "Apply black and white effect.",
+                    "title": "Black And White",
+                    "type": "boolean"
+                },
+                "brightness": {
+                    "default": false,
+                    "description": "Apply brightness effect.",
+                    "title": "Brightness",
+                    "type": "boolean"
+                },
+                "darkness": {
+                    "default": false,
+                    "description": "Apply darkness effect.",
+                    "title": "Darkness",
+                    "type": "boolean"
+                },
+                "contrast": {
+                    "default": false,
+                    "description": "Apply contrast effect.",
+                    "title": "Contrast",
+                    "type": "boolean"
+                },
+                "red": {
+                    "default": false,
+                    "description": "Apply red effect.",
+                    "title": "Red",
+                    "type": "boolean"
+                },
+                "green": {
+                    "default": false,
+                    "description": "Apply green effect.",
+                    "title": "Green",
+                    "type": "boolean"
+                },
+                "blue": {
+                    "default": false,
+                    "description": "Apply blue effect.",
+                    "title": "Blue",
+                    "type": "boolean"
+                },
+                "cool": {
+                    "default": false,
+                    "description": "Apply cool effect.",
+                    "title": "Cool",
+                    "type": "boolean"
+                },
+                "warm": {
+                    "default": false,
+                    "description": "Apply warm effect.",
+                    "title": "Warm",
+                    "type": "boolean"
+                },
+                "output_type": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/OutputTypeType"
+                        }
+                    ],
+                    "default": "both",
+                    "description": "Format of the output image. Options are: `file`, `base64_string`, `both`."
+                }
+            },
+            "required": [
+                "input_image"
+            ],
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "properties": {
+                "image_base64_string": {
+                    "default": "",
+                    "description": "Base64 encoded string of the output image.",
+                    "title": "Image Base64 String",
+                    "type": "string"
+                },
+                "image_file_path": {
+                    "default": "",
+                    "description": "Path to the output image file.",
+                    "title": "Image File Path",
+                    "type": "string"
+                }
+            },
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/jc-chen157/jiajun-template/tree/main/pieces/ImageFilterPiece"
+    },
+    "BulkHttpRequestPiece": {
+        "name": "BulkHttpRequestPiece",
+        "dependency": {
+            "dockerfile": null,
+            "requirements_file": "requirements_0.txt"
+        },
+        "tags": [
+            "default",
+            "http",
+            "request",
+            "bulk"
+        ],
+        "style": {
+            "node_label": "Bulk HTTP Request",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "material-symbols:send",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "Makes HTTP requests to a list of URLs and returns a list of base64 encoded responses.",
+        "input_schema": {
+            "$defs": {
+                "MethodTypes": {
+                    "enum": [
+                        "GET",
+                        "POST",
+                        "PUT",
+                        "DELETE"
+                    ],
+                    "title": "MethodTypes",
+                    "type": "string"
+                }
+            },
+            "properties": {
+                "urls": {
+                    "default": [],
+                    "description": "List of URLs to make requests to.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Urls",
+                    "type": "array"
+                },
+                "method": {
+                    "allOf": [
+                        {
+                            "$ref": "#/$defs/MethodTypes"
+                        }
+                    ],
+                    "default": "GET",
+                    "description": "HTTP method to use for all requests."
+                },
+                "bearer_token": {
+                    "default": null,
+                    "description": "Bearer token to use for authentication.",
+                    "title": "Bearer Token",
+                    "type": "string"
+                },
+                "body_json_data": {
+                    "default": "{\n    \"key_1\": \"value_1\",\n    \"key_2\": \"value_2\"\n}\n",
+                    "description": "JSON data to send in the request body for POST/PUT requests.",
+                    "title": "Body Json Data",
+                    "type": "string",
+                    "widget": "codeeditor-json"
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "properties": {
+                "base64_bytes_data_list": {
+                    "default": [],
+                    "description": "List of output data as base64 encoded strings.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Base64 Bytes Data List",
+                    "type": "array"
+                },
+                "errors": {
+                    "default": [],
+                    "description": "List of error messages for failed requests. Empty string for successful requests.",
+                    "items": {
+                        "type": "string"
+                    },
+                    "title": "Errors",
+                    "type": "array"
+                }
+            },
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/jc-chen157/jiajun-template/tree/main/pieces/BulkHttpRequestPiece"
+    },
+    "ExampleSineWavePiece": {
+        "name": "ExampleSineWavePiece",
+        "dependency": {
+            "dockerfile": "Dockerfile_1",
+            "requirements_file": null
+        },
+        "tags": [
+            "Example"
+        ],
+        "style": {
+            "node_label": "Example Sine Piece",
+            "node_type": "default",
+            "node_style": {
+                "backgroundColor": "#ebebeb"
+            },
+            "useIcon": true,
+            "icon_class_name": "fa-solid:database",
+            "iconStyle": {
+                "cursor": "pointer"
+            }
+        },
+        "description": "This is an example of a piece that uses Dockerfile for dependencies.",
+        "container_resources": {
+            "requests": {
+                "cpu": 100,
+                "memory": 128
+            },
+            "limits": {
+                "cpu": 500,
+                "memory": 512
+            }
+        },
+        "input_schema": {
+            "description": "Sleep Piece Input Model",
+            "properties": {
+                "frequency": {
+                    "default": 5,
+                    "description": "Frequency of the sine wave in Hz",
+                    "title": "Frequency",
+                    "type": "integer"
+                },
+                "duration": {
+                    "default": 1,
+                    "description": "Duration of the sine wave signal in seconds",
+                    "title": "Duration",
+                    "type": "integer"
+                },
+                "sample_rate": {
+                    "default": 1000,
+                    "description": "Sample rate of the sine wave signal.",
+                    "title": "Sample Rate",
+                    "type": "integer"
+                }
+            },
+            "title": "InputModel",
+            "type": "object"
+        },
+        "output_schema": {
+            "description": "Sleep Piece Output Model",
+            "properties": {
+                "message": {
+                    "description": "Sleep piece executed",
+                    "title": "Message",
+                    "type": "string"
+                }
+            },
+            "required": [
+                "message"
+            ],
+            "title": "OutputModel",
+            "type": "object"
+        },
+        "secrets_schema": null,
+        "source_url": "https://github.com/jc-chen157/jiajun-template/tree/main/pieces/ExampleSineWavePiece"
+    },
+    "ExampleSleepPiece": {
+        "name": "ExampleSleepPiece",
         "dependency": {
             "dockerfile": null,
             "requirements_file": "requirements_0.txt"
@@ -9,102 +562,57 @@
             "Example"
         ],
         "style": {
-            "node_label": "Simple Piece",
+            "node_label": "Example Sleep Piece",
             "node_type": "default",
             "node_style": {
                 "backgroundColor": "#ebebeb"
             },
             "useIcon": true,
-            "icon_class_name": "fas fa-database",
+            "icon_class_name": "fa-solid:database",
             "iconStyle": {
                 "cursor": "pointer"
             }
         },
-        "description": "This is an example of a simple Domino Piece",
+        "description": "This is an example of a simple Domino Piece that sleep for N seconds",
         "container_resources": {
             "requests": {
-                "cpu": "100m",
-                "memory": "128Mi"
+                "cpu": 100,
+                "memory": 128
             },
             "limits": {
-                "cpu": "500m",
-                "memory": "512Mi"
+                "cpu": 500,
+                "memory": 512
             }
         },
         "input_schema": {
-            "title": "InputModel",
-            "type": "object",
+            "description": "Sleep Piece Input Model",
             "properties": {
-                "distribution_name": {
-                    "description": "Name of the distribution to sample from",
-                    "allOf": [
-                        {
-                            "$ref": "#/definitions/DistributionType"
-                        }
-                    ]
-                },
-                "distribution_mean": {
-                    "title": "Distribution Mean",
-                    "description": "Distribution mean",
-                    "type": "number"
-                },
-                "distribution_sd": {
-                    "title": "Distribution Sd",
-                    "description": "Distribution standard deviation",
-                    "default": 1.0,
-                    "exclusiveMinimum": 0.0,
+                "sleep_time": {
+                    "default": 1,
+                    "description": "Number of seconds to sleep",
+                    "title": "Sleep Time",
                     "type": "number"
                 }
             },
-            "required": [
-                "distribution_name",
-                "distribution_mean"
-            ],
-            "definitions": {
-                "DistributionType": {
-                    "title": "DistributionType",
-                    "description": "An enumeration.",
-                    "enum": [
-                        "gaussian",
-                        "poisson"
-                    ],
-                    "type": "string"
-                }
-            }
+            "title": "InputModel",
+            "type": "object"
         },
         "output_schema": {
-            "title": "OutputModel",
-            "type": "object",
+            "description": "Sleep Piece Output Model",
             "properties": {
                 "message": {
+                    "description": "Sleep piece executed",
                     "title": "Message",
-                    "description": "Output message to log",
-                    "type": "string"
-                },
-                "sample_result": {
-                    "title": "Sample Result",
-                    "description": "The result of this Piece's processing",
                     "type": "string"
                 }
             },
             "required": [
-                "message",
-                "sample_result"
-            ]
+                "message"
+            ],
+            "title": "OutputModel",
+            "type": "object"
         },
-        "secrets_schema": {
-            "title": "SecretsModel",
-            "type": "object",
-            "properties": {
-                "EXAMPLE_OPERATOR_SECRET_1": {
-                    "title": "Example Operator Secret 1",
-                    "description": "A secret necessary to run this Piece",
-                    "type": "string"
-                }
-            },
-            "required": [
-                "EXAMPLE_OPERATOR_SECRET_1"
-            ]
-        }
+        "secrets_schema": null,
+        "source_url": "https://github.com/jc-chen157/jiajun-template/tree/main/pieces/ExampleSleepPiece"
     }
 }
